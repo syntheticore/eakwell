@@ -1,0 +1,34 @@
+{
+  "name": "eakwell",
+  "version": "0.1.0",
+  "description": "Utility functions for arrays and objects alike",
+  "homepage": "https://github.com/syntheticore/eakwell",
+  "author": "Björn Breitgoff <syntheticore@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/syntheticore/eakwell.git"
+  },
+  "bugs": {
+    "url": "https://github.com/syntheticore/eakwell/issues"
+  },
+  "main": "eakwell.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "rsvp": "^3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "codeclimate-test-reporter": "^0.1.1",
+    "istanbul": "^0.3.13",
+    "mocha": "^2.2.1"
+  },
+  "keywords": [
+    "utility",
+    "iterators",
+    "ajax",
+    "xhr"
+  ]
+}
