@@ -10,9 +10,18 @@ var _ = module.exports = {
   // Loop through objects and arrays
   // Return something truthy from callback to stop iteration
   each: function(items, cb) {
-    for(var key in items) {
-      var cancel = cb(items[key], key);
-      if(cancel) return cancel;
+    if(items && items.length != undefined) {
+      for(var i = 0; i < items.length; i++) {
+        var cancel = cb(items[i], i);
+        if(cancel) return cancel;
+      }
+    } else {
+      for(var key in items) {
+        if(items.hasOwnProperty(key)) {
+          var cancel = cb(items[key], key);
+          if(cancel) return cancel;
+        }
+      }
     }
     return false;
   },
