@@ -1,5 +1,5 @@
 # eakwell.js
-[![npm version](https://badge.fury.io/js/eakwell.svg)](http://badge.fury.io/js/eakwell) [![Build Status](https://travis-ci.org/syntheticore/eakwell.svg?branch=master)](https://travis-ci.org/syntheticore/eakwell) [![Dependency Status](https://david-dm.org/syntheticore/eakwell.svg)](https://david-dm.org/syntheticore/eakwell) [![Code Climate](https://codeclimate.com/github/syntheticore/eakwell/badges/gpa.svg)](https://codeclimate.com/github/syntheticore/eakwell)
+[![npm version](https://badge.fury.io/js/eakwell.svg)](http://badge.fury.io/js/eakwell) [![Build Status](https://travis-ci.org/syntheticore/eakwell.svg?branch=master)](https://travis-ci.org/syntheticore/eakwell) [![Test Coverage](https://codeclimate.com/github/syntheticore/eakwell/badges/coverage.svg)](https://codeclimate.com/github/syntheticore/eakwell/coverage) [![Dependency Status](https://david-dm.org/syntheticore/eakwell.svg)](https://david-dm.org/syntheticore/eakwell) [![Code Climate](https://codeclimate.com/github/syntheticore/eakwell/badges/gpa.svg)](https://codeclimate.com/github/syntheticore/eakwell)
 
 Utility functions for arrays and objects alike, as a CommonJS module.
 
