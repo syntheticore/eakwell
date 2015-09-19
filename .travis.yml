@@ -2,4 +2,8 @@ language: node_js
 node_js:
   - "0.12"
   - "0.10"
-
+addons:
+  code_climate:
+    repo_token: 2e224885b71ff514f5492801b0a3061a0f04661674217d8f5017923aa5888e91
+after_script:
+  - ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < ./coverage/lcov.info; rm -rf ./coverage;

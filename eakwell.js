@@ -14,6 +14,7 @@ var _ = module.exports = {
       var cancel = cb(items[key], key);
       if(cancel) return cancel;
     }
+    return false;
   },
 
   // Return a copy the given array
@@ -89,18 +90,18 @@ var _ = module.exports = {
     return out;
   },
 
+  count: function(items, cb) {
+    return _.select(items, cb).length;
+  },
+
   // Check if all items match the given condition
   all: function(items, cb) {
-    return _.select(items, cb).length == items.length;
+    return _.count(items, cb) == items.length;
   },
 
   // Check if any item matches the given condition
   any: function(items, cb) {
-    return _.each(items, function(item, key) {
-      if(cb(item, key)) {
-        return true;
-      }
-    }) || false;
+    return _.each(items, cb);
   },
 
   // Return the last element of the given array or string
@@ -228,6 +229,32 @@ var _ = module.exports = {
         trailingArguments = arguments;
       }
     };
+  },
+
+  // Return a Promises/A+ compliant promise object
+  promise: function(cb) {
+    return new rsvp.Promise(cb);
+  },
+
+  // Wrap a value with a promise
+  promiseFrom: function(value) {
+    return _.promise(function(ok) {
+      _.defer(function() {
+        ok(value);
+      });
+    });
+  },
+
+  // Resolve all values in <items>, which need not all be promises
+  resolvePromises: function(items) {
+    var wrapped = _.map(items, function(item) {
+      return _.promiseFrom(item);
+    });
+    if(Array.isArray(items)) {
+      return rsvp.all(wrapped);
+    } else {
+      return rsvp.hash(wrapped);
+    }
   },
 
   // Execute callback as soon as the DOM is complete
