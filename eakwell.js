@@ -29,8 +29,8 @@ var _ = module.exports = {
   // Return a copy the given array
   // with each item replaced according to <cbOrName>
   map: function(items, cbOrName) {
+    var out = (items && items.length != undefined ? [] : {});
     var callback = (typeof cbOrName === 'function');
-    var out = Array.isArray(items) ? [] : {};
     _.each(items, function(item, key) {
       out[key] = (callback ? cbOrName(item, key) : item[cbOrName]);
     });
@@ -83,7 +83,7 @@ var _ = module.exports = {
 
   // Select items fron an array or object that match the given condition
   select: function(items, cb, n) {
-    var ary = Array.isArray(items);
+    var ary = (items && items.length != undefined);
     var out = ary ? [] : {};
     var i = 0;
     _.each(items, function(item, key) {
@@ -122,9 +122,9 @@ var _ = module.exports = {
   // Individual items get picked at most once
   pick: function(items, n) {
     var i = Math.floor(Math.random() * items.length);
-    if(n >= 0) {
+    if(n != undefined) {
       items = _.clone(items);
-      return n >= 1 ? _.union(items.splice(i, 1), _.pick(items, n - 1)) : [];
+      return n == 0 ? [] : _.union(items.splice(i, 1), _.pick(items, n - 1));
     } else {
       return items[i];
     }
@@ -182,12 +182,12 @@ var _ = module.exports = {
   // Return new object with the fields from both given objects
   merge: function(obj1, obj2) {
     var obj = {};
-    for(var i in obj1) {
-      obj[i] = obj1[i];
-    }
-    for(var i in obj2) {
-      obj[i] = obj2[i];
-    }
+    _.each(obj1, function(value, key) {
+      obj[key] = value;
+    });
+    _.each(obj2, function(value, key) {
+      obj[key] = value;
+    });
     return obj;
   },
 
