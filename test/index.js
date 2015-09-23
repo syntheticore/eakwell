@@ -109,3 +109,11 @@ describe('#pick()', function() {
     }).should.be.true;
   });
 });
+
+describe('#difference()', function() {
+  var items1 = [1, 2, 3, 4];
+  var items2 = [      3, 4, 5, 6];
+  it('returns elements exclusive to only one of the arrays', function() {
+    _.difference(items1, items2).should.eql([1,2,5,6]);
+  });
+});

@@ -26,7 +26,7 @@ var _ = module.exports = {
     return false;
   },
 
-  // Return a copy the given array
+  // Return a copy of the given array
   // with each item replaced according to <cbOrName>
   map: function(items, cbOrName) {
     var out = (items && items.length != undefined ? [] : {});
@@ -81,7 +81,7 @@ var _ = module.exports = {
     return out;
   },
 
-  // Select items fron an array or object that match the given condition
+  // Select items from an array or object that match the given condition
   select: function(items, cb, n) {
     var ary = (items && items.length != undefined);
     var out = ary ? [] : {};
@@ -99,6 +99,7 @@ var _ = module.exports = {
     return out;
   },
 
+  // Return the number of items that match the given condition
   count: function(items, cb) {
     return _.select(items, cb).length;
   },
@@ -110,6 +111,11 @@ var _ = module.exports = {
 
   // Check if any item matches the given condition
   any: function(items, cb) {
+    return _.each(items, cb);
+  },
+
+  // Return the first element from <items> that matches the given condition
+  find: function(items, cb) {
     return _.each(items, cb);
   },
 
@@ -209,6 +215,15 @@ var _ = module.exports = {
     });
   },
 
+  // Return elements exclusive to only one of the arrays
+  difference: function(array1, array2) {
+    return _.union(_.select(array1, function(value) {
+      return !_.contains(array2, value);
+    }), _.select(array2, function(value) {
+      return !_.contains(array1, value);
+    }));
+  },
+
   // Recursively merge two data structures
   deepMerge: function(obj1, obj2) {
     return _.merge(obj1, obj2);
@@ -280,9 +295,7 @@ var _ = module.exports = {
   // Execute callback as soon as the DOM is complete
   documentReady: function(cb) {
     if(document.readyState == 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        cb();
-      });
+      document.addEventListener('DOMContentLoaded', cb);
     } else {
       _.defer(cb);
     }
@@ -333,6 +346,11 @@ var _ = module.exports = {
       matches.push(m);
     }
     return matches;
+  },
+
+  // Multiply <n> by itself
+  square: function(n) {
+    return n * n;
   },
 
   // Return a universally unique id
