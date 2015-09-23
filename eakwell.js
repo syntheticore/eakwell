@@ -152,6 +152,12 @@ var _ = module.exports = {
     }
    },
 
+   // Remove <item> from the given array
+   remove: function(items, item) {
+    var i = items.indexOf(item);
+    if(i != -1) return items.splice(i, 1);
+   },
+
   // Merge two arrays
   union: function(items1, items2) {
     var out = [];
