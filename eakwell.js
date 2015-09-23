@@ -179,6 +179,17 @@ var _ = module.exports = {
     return out;
   },
 
+  // Remove duplicates from the given list
+  unique: function(items) {
+    var out = [];
+    _.each(items, function(item) {
+      if(!_.contains(out, item)) {
+        out.push(item);
+      }
+    });
+    return out;
+  },
+
   // Return new object with the fields from both given objects
   merge: function(obj1, obj2) {
     var obj = {};
