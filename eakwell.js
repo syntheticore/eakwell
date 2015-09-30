@@ -29,7 +29,7 @@ var _ = module.exports = {
   // Return a copy of the given array
   // with each item replaced according to <cbOrName>
   map: function(items, cbOrName) {
-    var out = (items && items.length != undefined ? [] : {});
+    var out = (!items || items.length != undefined ? [] : {});
     var callback = (typeof cbOrName === 'function');
     _.each(items, function(item, key) {
       out[key] = (callback ? cbOrName(item, key) : item[cbOrName]);
@@ -116,7 +116,9 @@ var _ = module.exports = {
 
   // Return the first element from <items> that matches the given condition
   find: function(items, cb) {
-    return _.each(items, cb);
+    return _.each(items, function(item) {
+      if(cb(item)) return item;
+    });
   },
 
   // Return the last element of the given array or string
@@ -136,7 +138,7 @@ var _ = module.exports = {
     }
   },
 
-  // Check if <item> is a member of the array, object or string
+  // Check if <item> is a member of the given array, object or string
   // Return the key where <item> was found if <items> is an object
   contains: function(items, item) {
     // For arrays and strings
@@ -270,6 +272,18 @@ var _ = module.exports = {
         trailingArguments = arguments;
       }
     };
+  },
+
+  // Convenience function for binding event handlers
+  // Returns the given handler
+  on: function(element, eName, handler) {
+    element.addEventListener(eName, handler, false);
+    return handler;
+  },
+
+  // Convenience function for removing event handlers
+  off: function(element, eName, handler) {
+    element.removeEventListener(eName, handler, false);
   },
 
   // Return a Promises/A+ compliant promise object
