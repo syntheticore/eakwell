@@ -216,6 +216,12 @@ var _ = module.exports = {
     return obj;
   },
 
+  does: function(obj, methods) {
+    _.each(methods, function(method, name) {
+      obj[name] = method;
+    });
+  },
+
   // Return a copy without the null and undefined elements
   compact: function(items) {
     return _.select(items, function(item) {
@@ -378,6 +384,71 @@ var _ = module.exports = {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
       return v.toString(16);
+    });
+  },
+
+  eventHandling: function(obj) {
+    _.does(obj, {
+      listeners: [],
+
+      // Register a handler to be called every time an event happens
+      //XXX Support registering multiple events at once
+      on: function(actions, cb) {
+        var self = this;
+        actions = actions.split(' ');
+        _.each(actions, function(action) {
+          var l = {
+            action: action,
+            cb: cb
+          };
+          self.listeners.push(l);
+          self.listenerAdded();
+        });
+        return cb;
+      },
+
+      // Remove a handler from all events it was registered for
+      off: function(handler) {
+        for (var i = this.listeners.length - 1; i >= 0; i--) {
+          var l = this.listeners[i];
+          if(l.cb === handler) {
+            this.listeners.splice(i, 1);
+          }
+        }
+        this.listenerRemoved();
+        return this;
+      },
+
+      // Register a handler to be called as soon as an event happens
+      once: function(actions, cb) {
+        var self = this;
+        var handler = function() {
+          self.off(handler);
+          cb();
+        };
+        return self.on(actions, handler);
+      },
+
+      // Call all handlers that listen to this event
+      emit: function(action, data) {
+        var self = this;
+        var listeners = _.clone(self.listeners);
+        for(var i in listeners) {
+          var l = listeners[i];
+          if(l.action == action) {
+            l.cb.apply(self, data);
+          }
+        }
+        return self;
+      },
+
+      discardEventHandlers: function() {
+        this.listeners = [];
+        return this;
+      },
+
+      listenerAdded: function() {},
+      listenerRemoved: function() {}
     });
   }
 };
