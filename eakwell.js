@@ -99,6 +99,19 @@ var _ = module.exports = {
     return out;
   },
 
+  minBy: function(items, cb) {
+    var min;
+    var minValue = Infinity;
+    _.each(items, function(item) {
+      var value = cb(item);
+      if(value < minValue) {
+        min = item;
+        minValue = value;
+      }
+    });
+    return min;
+  },
+
   // Return the number of items that match the given condition
   count: function(items, cb) {
     return _.select(items, cb).length;
@@ -392,7 +405,6 @@ var _ = module.exports = {
       listeners: [],
 
       // Register a handler to be called every time an event happens
-      //XXX Support registering multiple events at once
       on: function(actions, cb) {
         var self = this;
         actions = actions.split(' ');
