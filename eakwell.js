@@ -407,6 +407,10 @@ var _ = module.exports = {
     });
   },
 
+  hasValue: function(obj) {
+    return obj != undefined && object != null;
+  },
+
   eventHandling: function(obj) {
     _.does(obj, {
       listeners: [],
