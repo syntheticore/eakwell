@@ -40,8 +40,15 @@ var _ = module.exports = {
   // Call the given function <n> times
   times: function(n, cb) {
     for(var i = 0; i < n; i++) {
-      cb(i);
+      var value = cb(i);
+      if(value) return value;
     }
+  },
+
+  step: function(from , to, steps, cb) {
+    return _.times(steps, function(step) {
+      return cb(from + (to - from) * step / steps);
+    });
   },
 
   // Invoke the named method on each item
