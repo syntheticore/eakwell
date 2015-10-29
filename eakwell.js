@@ -273,6 +273,16 @@ var _ = module.exports = {
     return setTimeout(cb, millis || 0);
   },
 
+  waitFor: function(condition, cb, interval) {
+    interval = interval || 100;
+    var iv = setInterval(function() {
+      if(condition()) {
+        cb();
+        clearInterval(iv);
+      }
+    }, interval);
+  },
+
   // Return a wrapper function that calls <cb>,
   // but at most every <thresh> milliseconds
   throttle: function(thresh, cb) {
