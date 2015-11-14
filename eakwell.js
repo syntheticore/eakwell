@@ -313,13 +313,19 @@ var _ = module.exports = {
   // Convenience function for binding event handlers
   // Returns the given handler
   on: function(element, eName, handler) {
-    element.addEventListener(eName, handler, false);
+    var eNames = eName.split(' ');
+    _.each(eNames, function(eName) {
+      element.addEventListener(eName, handler, false);
+    });
     return handler;
   },
 
   // Convenience function for removing event handlers
   off: function(element, eName, handler) {
-    element.removeEventListener(eName, handler, false);
+    var eNames = eName.split(' ');
+    _.each(eNames, function(eName) {
+      element.removeEventListener(eName, handler, false);
+    });
   },
 
   // Return a Promises/A+ compliant promise object
