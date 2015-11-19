@@ -424,7 +424,7 @@ var _ = module.exports = {
   },
 
   hasValue: function(obj) {
-    return obj != undefined && object != null;
+    return obj != undefined && obj != null;
   },
 
   eventHandling: function(obj) {
