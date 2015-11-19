@@ -481,6 +481,14 @@ var _ = module.exports = {
         return self;
       },
 
+      // Reemit events of another object
+      bubble: function(obj, action) {
+        var self = this;
+        return obj.on(action, function() {
+          self.emit(action, arguments);
+        });
+      },
+
       discardEventHandlers: function() {
         this.listeners = [];
         return this;
