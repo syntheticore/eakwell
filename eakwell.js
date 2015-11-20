@@ -391,7 +391,7 @@ var _ = module.exports = {
       req.ontimeout = function() {
         fail(Error("Timeout"));
       };
-      req.send(JSON.stringify(data || {}));
+      req.send(JSON.stringify(options.data || {}));
     });
   },
 
