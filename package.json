@@ -1,6 +1,6 @@
 {
   "name": "eakwell",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Utility functions for arrays and objects alike",
   "homepage": "https://github.com/syntheticore/eakwell",
   "author": "Björn Breitgoff <syntheticore@gmail.com>",
