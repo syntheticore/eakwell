@@ -364,14 +364,20 @@ var _ = module.exports = {
   },
 
   // JSON data over XMLHttpRequest as a promise
-  ajax: function(verb, url, data) {
+  ajax: function(options) {
+    options = _.merge({
+      verb: 'GET',
+      url: '',
+      responseType: 'json',
+      data: null
+    }, options);
     return new rsvp.Promise(function(ok, fail) {
       var req = new XMLHttpRequest();
       req.timeout = 1000 * 20;
-      req.open(verb, url);
+      req.open(options.verb, options.url);
       req.setRequestHeader('Content-Type', 'application/json')
-      req.setRequestHeader('Accept', 'application/json');
-      req.responseType = 'json';
+      // req.setRequestHeader('Accept', 'application/json');
+      req.responseType = options.responseType;
       req.onload = function() {
         if(req.status == 200) {
           ok(req.response);
@@ -385,7 +391,7 @@ var _ = module.exports = {
       req.ontimeout = function() {
         fail(Error("Timeout"));
       };
-      req.send(JSON.stringify(data));
+      req.send(JSON.stringify(data || {}));
     });
   },
 
