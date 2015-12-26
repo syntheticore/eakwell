@@ -16,9 +16,10 @@ var _ = module.exports = {
         if(cancel) return cancel;
       }
     } else {
+      var i = 0;
       for(var key in items) {
         if(items.hasOwnProperty(key)) {
-          var cancel = cb(items[key], key);
+          var cancel = cb(items[key], key, i++);
           if(cancel) return cancel;
         }
       }
