@@ -70,7 +70,7 @@ var _ = module.exports = {
       var item2 = items2[i];
       if(item2 == undefined) return true;
       out.push([item1, item2]);
-      cb && cb(item1, item2);
+      if(cb) return cb(item1, item2);
     });
     return out;
   },
