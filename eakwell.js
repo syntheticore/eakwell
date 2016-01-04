@@ -122,12 +122,16 @@ var _ = module.exports = {
 
   // Return the number of items that match the given condition
   count: function(items, cb) {
-    return _.select(items, cb).length;
+    var ary = (items && items.length != undefined);
+    var matched = _.select(items, cb);
+    return ary ? matched.length : _.keys(matched).length;
   },
 
   // Check if all items match the given condition
   all: function(items, cb) {
-    return _.count(items, cb) == items.length;
+    var ary = (items && items.length != undefined);
+    var length = ary ? items.length : _.keys(items).length
+    return _.count(items, cb) == length;
   },
 
   // Check if any item matches the given condition
@@ -375,7 +379,11 @@ var _ = module.exports = {
     return new rsvp.Promise(function(ok, fail) {
       var req = new XMLHttpRequest();
       req.timeout = 1000 * 20;
-      req.open(options.verb, options.url);
+      var url = options.url;
+      if(options.verb == 'GET' && options.data) {
+        url += '?data=' + encodeURIComponent(JSON.stringify(options.data));
+      }
+      req.open(options.verb, url);
       req.setRequestHeader('Content-Type', 'application/json')
       // req.setRequestHeader('Accept', 'application/json');
       req.responseType = options.responseType;
@@ -392,7 +400,11 @@ var _ = module.exports = {
       req.ontimeout = function() {
         fail(Error("Timeout"));
       };
-      req.send(JSON.stringify(options.data || {}));
+      if(options.verb == 'POST') {
+        req.send(JSON.stringify(options.data || {}));
+      } else {
+        req.send();
+      }
     });
   },
 
