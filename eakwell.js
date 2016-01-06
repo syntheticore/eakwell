@@ -179,11 +179,11 @@ var _ = module.exports = {
     }
    },
 
-   // Remove <item> from the given array
-   remove: function(items, item) {
+  // Remove <item> from the given array
+  remove: function(items, item) {
     var i = items.indexOf(item);
     if(i != -1) return items.splice(i, 1);
-   },
+  },
 
   // Merge two arrays
   union: function(items1, items2) {
@@ -279,6 +279,7 @@ var _ = module.exports = {
     return setTimeout(cb, millis || 0);
   },
 
+  // Keep checking <condition> until it's met
   waitFor: function(condition, cb, interval) {
     interval = interval || 100;
     var iv = setInterval(function() {
@@ -324,6 +325,15 @@ var _ = module.exports = {
       element.addEventListener(eName, handler, false);
     });
     return handler;
+  },
+
+  // Run the given handler at most once
+  once: function(element, eName, handler) {
+    var handle = _.on(element, eName, function() {
+      handler();
+      _.off(handle);
+    });
+    return handle;
   },
 
   // Convenience function for removing event handlers
