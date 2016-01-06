@@ -471,7 +471,7 @@ var _ = module.exports = {
             cb: cb
           };
           self.listeners.push(l);
-          self.emit('listenerAdded');
+          self.emit('listenerAdded', [action, cb]);
         });
         return cb;
       },
@@ -482,9 +482,9 @@ var _ = module.exports = {
           var l = this.listeners[i];
           if(l.cb === handler) {
             this.listeners.splice(i, 1);
+            this.emit('listenerRemoved', [l.action, handler]);
           }
         }
-        this.emit('listenerRemoved');
         return this;
       },
 
