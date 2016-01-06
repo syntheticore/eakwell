@@ -241,6 +241,7 @@ var _ = module.exports = {
     return obj;
   },
 
+  // Mix methods into the given object
   does: function(obj, methods) {
     _.each(methods, function(method, name) {
       obj[name] = method;
@@ -460,7 +461,7 @@ var _ = module.exports = {
             cb: cb
           };
           self.listeners.push(l);
-          self.listenerAdded();
+          self.emit('listenerAdded');
         });
         return cb;
       },
@@ -473,7 +474,7 @@ var _ = module.exports = {
             this.listeners.splice(i, 1);
           }
         }
-        this.listenerRemoved();
+        this.emit('listenerRemoved');
         return this;
       },
 
@@ -501,7 +502,7 @@ var _ = module.exports = {
       },
 
       // Reemit events of another object
-      bubble: function(obj, action) {
+      proxy: function(obj, action) {
         var self = this;
         return obj.on(action, function() {
           self.emit(action, arguments);
@@ -511,10 +512,7 @@ var _ = module.exports = {
       discardEventHandlers: function() {
         this.listeners = [];
         return this;
-      },
-
-      listenerAdded: function() {},
-      listenerRemoved: function() {}
+      }
     });
   }
 };
