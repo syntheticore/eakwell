@@ -10,7 +10,7 @@ var _ = module.exports = {
   // Loop through objects and arrays
   // Return something truthy from callback to stop iteration
   each: function(items, cb) {
-    if(items && items.length != undefined) {
+    if(Array.isArray(items)) {
       for(var i = 0; i < items.length; i++) {
         var cancel = cb(items[i], i);
         if(cancel) return cancel;
@@ -91,7 +91,7 @@ var _ = module.exports = {
 
   // Select items from an array or object that match the given condition
   select: function(items, cb, n) {
-    var ary = (items && items.length != undefined);
+    var ary = Array.isArray(items);
     var out = ary ? [] : {};
     var i = 0;
     _.each(items, function(item, key) {
@@ -107,6 +107,31 @@ var _ = module.exports = {
     return out;
   },
 
+  // Separate the items for which the condition holds
+  // from those for which it does not
+  partition: function(items, cb) {
+    var ary = Array.isArray(items);
+    var out1 = ary ? [] : {};
+    var out2 = ary ? [] : {};
+    _.each(items, function(item, key) {
+      if(cb(item, key)) {
+        if(ary) {
+          out1.push(item);
+        } else {
+          out1[key] = item;
+        }
+      } else {
+        if(ary) {
+          out2.push(item);
+        } else {
+          out2[key] = item;
+        }
+      }
+    });
+    return [out1, out2];
+  },
+
+  // Return the smallest item according to <cb>
   minBy: function(items, cb) {
     var min;
     var minValue = Infinity;
@@ -122,14 +147,14 @@ var _ = module.exports = {
 
   // Return the number of items that match the given condition
   count: function(items, cb) {
-    var ary = (items && items.length != undefined);
+    var ary = Array.isArray(items);
     var matched = _.select(items, cb);
     return ary ? matched.length : _.keys(matched).length;
   },
 
   // Check if all items match the given condition
   all: function(items, cb) {
-    var ary = (items && items.length != undefined);
+    var ary = Array.isArray(items);
     var length = ary ? items.length : _.keys(items).length
     return _.count(items, cb) == length;
   },
@@ -197,9 +222,26 @@ var _ = module.exports = {
     return out;
   },
 
-  // Shallow copy the given array
+  // Return elements exclusive to only one of the arrays
+  difference: function(array1, array2) {
+    return _.union(_.select(array1, function(value) {
+      return !_.contains(array2, value);
+    }), _.select(array2, function(value) {
+      return !_.contains(array1, value);
+    }));
+  },
+
+  // Return elements contained in both arrays
+  intersection: function(array1, array2) {
+    return _.select(array1, function(value) {
+      return _.contains(array2, value);
+    });
+  },
+
+  // Shallow copy the given array or object
   clone: function(items) {
-    return _.union(items, []);
+    var ary = Array.isArray(items);
+    return ary ? _.union(items, []) : _.merge(items, {});
   },
 
   // Return the given object's keys
@@ -253,15 +295,6 @@ var _ = module.exports = {
     return _.select(items, function(item) {
       return item != null && item != undefined;
     });
-  },
-
-  // Return elements exclusive to only one of the arrays
-  difference: function(array1, array2) {
-    return _.union(_.select(array1, function(value) {
-      return !_.contains(array2, value);
-    }), _.select(array2, function(value) {
-      return !_.contains(array1, value);
-    }));
   },
 
   // Recursively merge two data structures
@@ -511,7 +544,7 @@ var _ = module.exports = {
         return self;
       },
 
-      // Reemit events of another object
+      // Re-emit events of another object
       proxy: function(obj, action) {
         var self = this;
         return obj.on(action, function() {
@@ -519,9 +552,25 @@ var _ = module.exports = {
         });
       },
 
-      discardEventHandlers: function() {
-        this.listeners = [];
-        return this;
+      // Drop all listeners
+      discardEventHandlers: function(silent) {
+        var self = this;
+        if(silent) {
+          self.listeners = [];
+        } else {
+          var parts = _.partition(self.listeners, function(l) {
+            return l.action == 'listenerRemoved';
+          });
+          // Remove regular event handlers first
+          _.each(parts[1], function(l) {
+            self.off(l.cb);
+          });
+          // Then remove the 'listenerRemoved' handlers themselves
+          _.each(parts[0], function(l) {
+            self.off(l.cb);
+          });
+        }
+        return self;
       }
     });
   }

@@ -94,6 +94,14 @@ describe('#select()', function() {
   });
 });
 
+describe('#partition()', function() {
+  it('returns two lists', function() {
+    _.partition([1, 2, 3, 4], function(n) {
+      return n > 2;
+    }).should.eql([[3, 4], [1, 2]]);
+  });
+});
+
 describe('#pick()', function() {
   var items = [1, 2, 3, 4];
   it('returns a random element', function() {
@@ -114,6 +122,14 @@ describe('#difference()', function() {
   var items1 = [1, 2, 3, 4];
   var items2 = [      3, 4, 5, 6];
   it('returns elements exclusive to only one of the arrays', function() {
-    _.difference(items1, items2).should.eql([1,2,5,6]);
+    _.difference(items1, items2).should.eql([1, 2, 5, 6]);
+  });
+});
+
+describe('#intersection()', function() {
+  var items1 = [1, 2, 3, 4];
+  var items2 = [      3, 4, 5, 6];
+  it('returns elements contained in both arrays', function() {
+    _.intersection(items1, items2).should.eql([3, 4]);
   });
 });
