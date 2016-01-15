@@ -46,7 +46,8 @@ var _ = module.exports = {
     }
   },
 
-  step: function(from , to, steps, cb) {
+  // Ramp a value up from <from> to <to> in <steps> steps
+  step: function(from, to, steps, cb) {
     return _.times(steps, function(step) {
       return cb(from + (to - from) * step / steps);
     });
