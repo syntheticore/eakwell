@@ -241,8 +241,12 @@ var _ = module.exports = {
 
   // Shallow copy the given array or object
   clone: function(items) {
-    var ary = Array.isArray(items);
-    return ary ? _.union(items, []) : _.merge(items, {});
+    if(items != null && typeof(items) == 'object') {
+      var ary = Array.isArray(items);
+      return ary ? _.union(items, []) : _.merge(items, {});
+    } else {
+      return items;
+    }
   },
 
   // Return the given object's keys
@@ -386,9 +390,9 @@ var _ = module.exports = {
   // Wrap a value with a promise
   promiseFrom: function(value) {
     return _.promise(function(ok) {
-      _.defer(function() {
+      // _.defer(function() {
         ok(value);
-      });
+      // });
     });
   },
 
