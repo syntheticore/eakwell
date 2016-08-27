@@ -319,7 +319,7 @@ var _ = module.exports = {
 
   // Keep checking <condition> until it's met
   waitFor: function(condition, cb, interval) {
-    interval = interval || 100;
+    interval = interval || 100;
     var iv = setInterval(function() {
       if(condition()) {
         cb();
@@ -450,7 +450,7 @@ var _ = module.exports = {
         fail(Error("Timeout"));
       };
       if(options.verb == 'POST') {
-        req.send(JSON.stringify(options.data || {}));
+        req.send(JSON.stringify(options.data || {}));
       } else {
         req.send();
       }
