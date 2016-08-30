@@ -2,6 +2,10 @@
 
 var rsvp = require('rsvp');
 
+rsvp.on('error', function(e) {
+    throw e;
+});
+
 var _ = module.exports = {
 
   // Empty placeholder function
