@@ -3,7 +3,8 @@
 var rsvp = require('rsvp');
 
 rsvp.on('error', function(e) {
-    throw e;
+  console.error(e);
+  // throw e;
 });
 
 var _ = module.exports = {
@@ -355,6 +356,30 @@ var _ = module.exports = {
           }, sleep);
         }
         trailingArguments = arguments;
+      }
+    };
+  },
+
+  // Return a wrapper function that calls <cb>,
+  // but waits with the next call until its
+  // asynchronous predecessor has returned
+  autoThrottle: function(cb) {
+    var running = false;
+    var updateRequested = false;
+    return function() {
+      if(running) {
+        updateRequested = true;
+      } else {
+        var ok = function() {
+          running = false;
+          if(updateRequested) {
+            updateRequested = false;
+            running = true;
+            cb(ok);
+          }
+        };
+        running = true;
+        cb(ok);
       }
     };
   },
