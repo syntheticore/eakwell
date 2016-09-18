@@ -4,7 +4,7 @@ var rsvp = require('rsvp');
 
 rsvp.on('error', function(e) {
   console.error(e);
-  // throw e;
+  throw e;
 });
 
 var _ = module.exports = {
@@ -149,6 +149,20 @@ var _ = module.exports = {
       }
     });
     return min;
+  },
+
+  // Return the largest item according to <cb>
+  maxBy: function(items, cb) {
+    var max;
+    var maxValue = -Infinity;
+    _.each(items, function(item) {
+      var value = cb(item);
+      if(value > maxValue) {
+        max = item;
+        maxValue = value;
+      }
+    });
+    return max;
   },
 
   // Return the number of items that match the given condition
@@ -466,7 +480,7 @@ var _ = module.exports = {
       // req.setRequestHeader('Accept', 'application/json');
       req.responseType = options.responseType;
       req.onload = function() {
-        if(req.status == 200) {
+        if(('' + req.status)[0] == '2') {
           ok(req.response);
         } else {
           fail(Error(req.statusText));
