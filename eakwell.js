@@ -138,11 +138,12 @@ var _ = module.exports = {
   },
 
   // Return the smallest item according to <cb>
-  minBy: function(items, cb) {
+  minBy: function(items, cbOrName) {
     var min;
     var minValue = Infinity;
+    var callback = (typeof cbOrName === 'function');
     _.each(items, function(item) {
-      var value = cb(item);
+      var value = callback ? cbOrName(item) : item[cbOrName];
       if(value < minValue) {
         min = item;
         minValue = value;
@@ -152,11 +153,12 @@ var _ = module.exports = {
   },
 
   // Return the largest item according to <cb>
-  maxBy: function(items, cb) {
+  maxBy: function(items, cbOrName) {
     var max;
     var maxValue = -Infinity;
+    var callback = (typeof cbOrName === 'function');
     _.each(items, function(item) {
-      var value = cb(item);
+      var value = callback ? cbOrName(item) : item[cbOrName];
       if(value > maxValue) {
         max = item;
         maxValue = value;
@@ -282,6 +284,14 @@ var _ = module.exports = {
       }
     }
     return out;
+  },
+
+  average: function(values) {
+    var avrg = 0;
+    _.each(values, function(value) {
+      avrg += value;
+    });
+    return avrg / values.length;
   },
 
   // Remove duplicates from the given list
