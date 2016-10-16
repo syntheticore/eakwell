@@ -142,8 +142,8 @@ var _ = module.exports = {
     var min;
     var minValue = Infinity;
     var callback = (typeof cbOrName === 'function');
-    _.each(items, function(item) {
-      var value = callback ? cbOrName(item) : item[cbOrName];
+    _.each(items, function(item, i) {
+      var value = callback ? cbOrName(item, i) : item[cbOrName];
       if(value < minValue) {
         min = item;
         minValue = value;
@@ -157,8 +157,8 @@ var _ = module.exports = {
     var max;
     var maxValue = -Infinity;
     var callback = (typeof cbOrName === 'function');
-    _.each(items, function(item) {
-      var value = callback ? cbOrName(item) : item[cbOrName];
+    _.each(items, function(item, i) {
+      var value = callback ? cbOrName(item, i) : item[cbOrName];
       if(value > maxValue) {
         max = item;
         maxValue = value;
@@ -188,8 +188,8 @@ var _ = module.exports = {
 
   // Return the first element from <items> that matches the given condition
   find: function(items, cb) {
-    return _.each(items, function(item) {
-      if(cb(item)) return item;
+    return _.each(items, function(item, i) {
+      if(cb(item, i)) return item;
     });
   },
 
