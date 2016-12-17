@@ -286,6 +286,14 @@ var _ = module.exports = {
     return out;
   },
 
+  size: function(items) {
+    if(Array.isArray(items)) {
+      return items.length;
+    } else {
+      return _.keys(items).length;
+    }
+  },
+
   average: function(values) {
     var avrg = 0;
     _.each(values, function(value) {
