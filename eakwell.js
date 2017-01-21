@@ -354,6 +354,13 @@ var _ = module.exports = {
     return setTimeout(cb, millis || 0);
   },
 
+  // Defer as a promise
+  delay: function(millis) {
+    return new Promise(function(ok, fail) {
+      _.defer(ok, millis);
+    });
+  },
+
   // Keep checking <condition> until it's met
   waitFor: function(condition, cb, interval) {
     interval = interval || 100;
