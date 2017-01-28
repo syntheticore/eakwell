@@ -11,9 +11,6 @@
   "bugs": {
     "url": "https://github.com/syntheticore/eakwell/issues"
   },
-  "dependencies": {
-    "rsvp": "^3.1.0"
-  },
   "devDependencies": {
     "chai": "^2.2.0",
     "codeclimate-test-reporter": "^0.1.1",

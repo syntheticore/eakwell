@@ -1,12 +1,5 @@
 "use strict";
 
-var rsvp = require('rsvp');
-
-rsvp.on('error', function(e) {
-  console.error(e);
-  throw e;
-});
-
 var _ = module.exports = {
 
   // Empty placeholder function
@@ -452,27 +445,30 @@ var _ = module.exports = {
 
   // Return a Promises/A+ compliant promise object
   promise: function(cb) {
-    return new rsvp.Promise(cb);
+    return new Promise(cb);
   },
 
   // Wrap a value with a promise
   promiseFrom: function(value) {
-    return _.promise(function(ok) {
-      // _.defer(function() {
-        ok(value);
-      // });
-    });
+    return Promise.resolve(value);
   },
 
   // Resolve all values in <items>, which need not all be promises
   resolvePromises: function(items) {
-    var wrapped = _.map(items, function(item) {
-      return _.promiseFrom(item);
-    });
     if(Array.isArray(items)) {
-      return rsvp.all(wrapped);
+      return Promise.all(items);
     } else {
-      return rsvp.hash(wrapped);
+      var keys = _.keys(items);
+      var values = _.map(keys, function(key) {
+        return items[key];
+      });
+      return Promise.all(values).then(function(values) {
+        var out = {};
+        _.each(keys, function(key, i) {
+          out[key] = values[i];
+        });
+        return out;
+      });
     }
   },
 
@@ -493,7 +489,7 @@ var _ = module.exports = {
       responseType: 'json',
       data: null
     }, options);
-    return new rsvp.Promise(function(ok, fail) {
+    return new Promise(function(ok, fail) {
       var req = new XMLHttpRequest();
       req.timeout = 1000 * 20;
       var url = options.url;
