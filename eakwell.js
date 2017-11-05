@@ -428,11 +428,11 @@ var _ = module.exports = {
 
   // Run the given handler at most once
   once: function(element, eName, handler) {
-    var handle = _.on(element, eName, function() {
+    _.on(element, eName, function() {
       handler();
-      _.off(handle);
+      _.off(element, eName, handler);
     });
-    return handle;
+    return handler;
   },
 
   // Convenience function for removing event handlers
@@ -470,6 +470,20 @@ var _ = module.exports = {
         return out;
       });
     }
+  },
+
+  deferred: function() {
+    var resolve;
+    var reject;
+    var p = new Promise(function(ok, fail) {
+      resolve = ok;
+      reject = fail;
+    });
+    return {
+      resolve: resolve,
+      reject: reject,
+      then: p.then.bind(p)
+    };
   },
 
   // Execute callback as soon as the DOM is complete
