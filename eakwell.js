@@ -357,12 +357,15 @@ var _ = module.exports = {
   // Keep checking <condition> until it's met
   waitFor: function(condition, cb, interval) {
     interval = interval || 100;
-    var iv = setInterval(function() {
-      if(condition()) {
-        cb();
-        clearInterval(iv);
-      }
-    }, interval);
+    return new Promise(function(ok, fail) {
+      var iv = setInterval(function() {
+        if(condition()) {
+          clearInterval(iv);
+          cb && cb();
+          ok();
+        }
+      }, interval);
+    });
   },
 
   // Return a wrapper function that calls <cb>,
