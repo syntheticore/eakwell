@@ -432,7 +432,7 @@ var _ = module.exports = {
   // Run the given handler at most once
   once: function(element, eName, handler) {
     _.on(element, eName, function() {
-      handler();
+      handler.apply(element, arguments);
       _.off(element, eName, handler);
     });
     return handler;
